@@ -15,7 +15,7 @@ def login_view(request):
             return render(request, "accounts/login.html", {'error': 'invalid username or password'})
         login(request, user)
         # Will be replaced by a redirection link for bookings
-        return redirect('/admin')
+        return redirect('/')
     return render(request, "accounts/login.html", {})
 
 

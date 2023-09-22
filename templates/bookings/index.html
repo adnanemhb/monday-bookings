@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <style>
+        .data-table {
+            font-size: 12px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+    </style>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h2 class="section-title">Today's Check-In Bookings</h2>
+                <table id="todayCheckInTable" class="table table-striped data-table">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>Guest Name</th>
+                        <th>Status</th>
+                        <th>Flat Booked</th>
+                        <th>Check-in Date</th>
+                        <th>Check-out Date</th>
+                        <th>Creation Log</th>
+                        {% if user.is_superuser %}
+                            <th>Booking Value</th>
+                        {% endif %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for booking in todayCheckInBookings %}
+                        <tr>
+                            <td>{{ booking.guest_name|default:"" }}</td>
+                            <td>{{ booking.status|default:"" }}</td>
+                            <td>{{ booking.flat_booked|default:"" }}</td>
+                            <td>{{ booking.check_in_date|date:"Y-m-d" }}</td>
+                            <td>{{ booking.check_out_date|date:"Y-m-d" }}</td>
+                            <td>{{ booking.creation_log|default:"" }}</td>
+                            {% if user.is_superuser %}
+                                <td>{{ booking.booking_value|default:"" }}</td>
+                            {% endif %}
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="7">No check-in bookings for today.</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <h2 class="section-title">Next Three Days' Check-Out Bookings</h2>
+                <table id="nextThreeDaysCheckoutTable" class="table table-striped data-table">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>Guest Name</th>
+                        <th>Status</th>
+                        <th>Flat Booked</th>
+                        <th>Check-in Date</th>
+                        <th>Check-out Date</th>
+                        <th>Creation Log</th>
+                        {% if user.is_superuser %}
+                            <th>Booking Value</th>
+                        {% endif %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for booking in nextThreeDaysCheckoutBookings %}
+                        <tr>
+                            <td>{{ booking.guest_name|default:"" }}</td>
+                            <td>{{ booking.status|default:"" }}</td>
+                            <td>{{ booking.flat_booked|default:"" }}</td>
+                            <td>{{ booking.check_in_date|date:"Y-m-d" }}</td>
+                            <td>{{ booking.check_out_date|date:"Y-m-d" }}</td>
+                            <td>{{ booking.creation_log|default:"" }}</td>
+                            {% if user.is_superuser %}
+                                <td>{{ booking.booking_value|default:"" }}</td>
+                            {% endif %}
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="7">No check-out bookings in the next three days.</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-12">
+                <h2 class="section-title">All Bookings</h2>
+                <table id="allBookingsTable" class="table table-striped data-table">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>Guest Name</th>
+                        <th>Status</th>
+                        <th>Flat Booked</th>
+                        <th>Check-in Date</th>
+                        <th>Check-out Date</th>
+                        <th>Creation Log</th>
+                        {% if user.is_superuser %}
+                            <th>Booking Value</th>
+                        {% endif %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for booking in allBookings %}
+                        <tr>
+                            <td>{{ booking.guest_name|default:"" }}</td>
+                            <td>{{ booking.status|default:"" }}</td>
+                            <td>{{ booking.flat_booked|default:"" }}</td>
+                            <td>{{ booking.check_in_date|date:"Y-m-d" }}</td>
+                            <td>{{ booking.check_out_date|date:"Y-m-d" }}</td>
+                            <td>{{ booking.creation_log|default:"" }}</td>
+                            {% if user.is_superuser %}
+                                <td>{{ booking.booking_value|default:"" }}</td>
+                            {% endif %}
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="7">No bookings available.</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include jQuery (required for DataTables) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Include DataTables JS -->
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script>
+        jQuery(function () {
+            jQuery('#allBookingsTable').DataTable({
+                pageLength: 5,
+                lengthMenu: [5, 10, 25, 50]
+            });
+        });
+        jQuery(function () {
+            jQuery('#todayCheckInTable').DataTable({
+                pageLength: 5,
+                lengthMenu: [5, 10, 25, 50]
+            });
+        });
+
+        jQuery(function () {
+            jQuery('#nextThreeDaysCheckoutTable').DataTable({
+                pageLength: 5,
+                lengthMenu: [5, 10, 25, 50]
+            });
+        });
+    </script>
+
+{% endblock %}
